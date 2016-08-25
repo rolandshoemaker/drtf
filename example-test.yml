@@ -1,0 +1,36 @@
+initial-query: google.com. IN A
+query-type: udp
+expected-answer: google.com. 300 IN A 216.58.194.174
+upstreams:
+  - addresses: $root-servers # ...
+    network: udp
+    responses:
+      - question: google.com. IN A
+        answer:
+          ns:
+            - com. 172800 IN NS a.gtld-servers.net.
+            - com. 172800 IN NS b.gtld-servers.net.
+          extra:
+            - a.gtld-servers.net. 172800 IN A 192.5.6.30
+            - b.gtld-servers.net. 172800 IN A 192.33.14.30
+  - addresses:
+      - 192.5.6.30
+      - 192.33.14.30
+    network: udp
+    responses:
+      - question: google.com. IN A
+        answer:
+          ns:
+            - google.com. 172800 IN NS ns2.google.com.
+            - google.com. 172800 IN NS ns1.google.com.
+          extra:
+            - ns2.google.com. 172800 IN A 216.239.34.10
+            - ns1.google.com. 172800 IN A 216.239.32.10
+  - addresses:
+      - 216.239.34.10
+      - 216.239.32.10
+    network: udp
+    responses:
+      - question: google.com. IN A
+        answer:
+          answer: google.com. 300 IN A 216.58.194.174
